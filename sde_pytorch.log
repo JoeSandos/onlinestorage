@@ -1,0 +1,701 @@
+2025-06-11 10:24:37,034 - runner - DEBUG - Starting sample with config: cifar10_ncsnpp_cont
+2025-06-11 10:24:37,035 - runner - DEBUG - Current configuration:
+2025-06-11 10:24:37,039 - runner - DEBUG - _fields: {'num_classes': 10, 'data': centered: false
+color_channels: 3
+image_size: 32
+name: CIFAR10
+num_workers: 4
+random_flip: true
+uniform_dequantization: false
+, 'model': attention_type: ddpm
+attn_resolutions: !!python/tuple
+- 16
+beta_max: 20.0
+beta_min: 0.1
+ch_mult: !!python/tuple
+- 1
+- 2
+- 2
+- 2
+conditional: true
+continuous: true
+conv_size: 3
+device: cuda
+discretization_steps: 1000
+dropout: 0.1
+ema_rate: 0.999
+embedding_type: fourier
+fir: true
+fir_kernel:
+- 1
+- 3
+- 3
+- 1
+fourier_scale: 16
+init_scale: 0.0
+name: ncsnpp
+nf: 128
+nonlinearity: swish
+normalization: GroupNorm
+num_res_blocks: 4
+num_scales: 1000
+progressive: none
+progressive_combine: sum
+progressive_input: residual
+resamp_with_conv: true
+resblock_type: biggan
+scale_by_sigma: true
+sde_type: vesde
+sigma_max: 50
+sigma_min: 0.01
+skip_rescale: true
+, 'training': batch_size: 128
+best_evaluate_loss: 150
+brand_new_epochs: 2000
+continue_training_epochs: 8000
+device: cuda
+eps: 1.0e-05
+eval_freq: 5
+eval_save_least_epoch: 50
+log_freq: 1
+reduce_mean: false
+snapshot_batch_size: 36
+snapshot_freq: 100
+snapshot_sampling: true
+use_all_data: false
+, 'sampling': batch_size: 1000
+corrector: langevin
+corrector_steps: 1
+device: cuda
+discretization_steps: 1000
+eps: 1.0e-05
+eval: true
+method: pc
+noise_removal: true
+predictor: reverse_diffusion
+record_freq: 100
+snr: 0.16
+total_samples: 60000
+, 'optim': beta1: 0.9
+eps: 1.0e-08
+grad_clip: 1.0
+lr: 0.0002
+optimizer: Adam
+warmup: 2
+weight_decay: 0
+, 'seed': 42, 'io': sampling_from_epoch: null
+training_from_scratch: false
+user_logging_level: info
+, 'parse_args': Namespace(config='cifar10_ncsnpp_cont', mode='sample', user_logging_level='info', training_from_scratch=False, sampling_from_epoch=None), 'logger': <Logger runner (DEBUG)>, 'mode': 'sample'}
+2025-06-11 10:24:37,039 - runner - DEBUG - _locked: False
+2025-06-11 10:24:37,039 - runner - DEBUG - _type_safe: True
+2025-06-11 10:24:37,039 - runner - DEBUG - _convert_dict: True
+2025-06-11 10:24:37,039 - runner - DEBUG - _allow_dotted_keys: False
+2025-06-11 10:24:37,039 - runner - DEBUG - _sort_keys: True
+2025-06-11 10:24:38,887 - runner - DEBUG - DataParallel(
+  (module): NCSNpp(
+    (act): SiLU()
+    (all_modules): ModuleList(
+      (0): GaussianFourierProjection()
+      (1): Linear(in_features=256, out_features=512, bias=True)
+      (2): Linear(in_features=512, out_features=512, bias=True)
+      (3): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (4-7): 4 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=128, bias=True)
+        (GroupNorm_1): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (8): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=128, bias=True)
+        (GroupNorm_1): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(128, 128, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (9): Downsample(
+        (Conv2d_0): Conv2d()
+      )
+      (10): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(128, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (11): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (12): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (13): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (14): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (15): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (16): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (17): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (18): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (19): Downsample(
+        (Conv2d_0): Conv2d()
+      )
+      (20-23): 4 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (24): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (25): Downsample(
+        (Conv2d_0): Conv2d()
+      )
+      (26-30): 5 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (31): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (32): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): SiLU()
+      )
+      (33-37): 5 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 512, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (38): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (39-43): 5 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 512, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (44): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (45-48): 4 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 512, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (49): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 384, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(384, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (50): AttnBlockpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (NIN_0): NIN()
+        (NIN_1): NIN()
+        (NIN_2): NIN()
+        (NIN_3): NIN()
+      )
+      (51): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=256, bias=True)
+        (GroupNorm_1): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (52): ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 384, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(384, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=128, bias=True)
+        (GroupNorm_1): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(384, 128, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (53-56): 4 x ResnetBlockBigGANpp(
+        (GroupNorm_0): GroupNorm(32, 256, eps=1e-06, affine=True)
+        (Conv_0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Dense_0): Linear(in_features=512, out_features=128, bias=True)
+        (GroupNorm_1): GroupNorm(32, 128, eps=1e-06, affine=True)
+        (Dropout_0): Dropout(p=0.1, inplace=False)
+        (Conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (Conv_2): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1))
+        (act): SiLU()
+      )
+      (57): GroupNorm(32, 128, eps=1e-06, affine=True)
+      (58): Conv2d(128, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+)
+2025-06-11 10:24:38,900 - runner - INFO - Loading checkpoint from assets/ve/cifar10_ncsnpp_cont/ckpt/epoch_1999.pth
+2025-06-11 10:24:40,090 - runner - INFO - Sampling total 60000 samples; Already generated 2000 samples; Remaining samples: 58000
+2025-06-11 10:24:40,125 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 10:34:17,551 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_2000_3000.pt
+2025-06-11 10:34:30,228 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 10:34:30,243 - runner - INFO - Sampling total 60000 samples; Already generated 3000 samples; Remaining samples: 57000
+2025-06-11 10:34:30,352 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 10:34:35,600 - runner - INFO - FID Score: 27.22280126040937
+2025-06-11 10:34:35,662 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 10:44:12,632 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_3000_4000.pt
+2025-06-11 10:44:30,690 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 10:44:30,711 - runner - INFO - Sampling total 60000 samples; Already generated 4000 samples; Remaining samples: 56000
+2025-06-11 10:44:30,711 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 10:44:35,786 - runner - INFO - FID Score: 24.962107641936655
+2025-06-11 10:44:35,829 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 10:54:13,093 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_4000_5000.pt
+2025-06-11 10:54:36,394 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 10:54:36,419 - runner - INFO - Sampling total 60000 samples; Already generated 5000 samples; Remaining samples: 55000
+2025-06-11 10:54:36,419 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 10:54:42,168 - runner - INFO - FID Score: 23.47520699121702
+2025-06-11 10:54:42,221 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:04:19,570 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_5000_6000.pt
+2025-06-11 11:04:47,746 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:04:47,776 - runner - INFO - Sampling total 60000 samples; Already generated 6000 samples; Remaining samples: 54000
+2025-06-11 11:04:47,776 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:04:54,000 - runner - INFO - FID Score: 22.453319375300055
+2025-06-11 11:04:54,063 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:14:31,367 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_6000_7000.pt
+2025-06-11 11:15:04,171 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:15:04,206 - runner - INFO - Sampling total 60000 samples; Already generated 7000 samples; Remaining samples: 53000
+2025-06-11 11:15:04,206 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:15:11,053 - runner - INFO - FID Score: 21.933031361069595
+2025-06-11 11:15:11,138 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:24:47,585 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_7000_8000.pt
+2025-06-11 11:25:25,646 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:25:25,687 - runner - INFO - Sampling total 60000 samples; Already generated 8000 samples; Remaining samples: 52000
+2025-06-11 11:25:25,687 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:25:32,982 - runner - INFO - FID Score: 21.404935748424123
+2025-06-11 11:25:33,072 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:35:09,605 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_8000_9000.pt
+2025-06-11 11:35:52,838 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:35:52,883 - runner - INFO - Sampling total 60000 samples; Already generated 9000 samples; Remaining samples: 51000
+2025-06-11 11:35:52,884 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:36:00,597 - runner - INFO - FID Score: 21.123997067221694
+2025-06-11 11:36:00,691 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:45:36,907 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_9000_10000.pt
+2025-06-11 11:46:24,870 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:46:24,919 - runner - INFO - Sampling total 60000 samples; Already generated 10000 samples; Remaining samples: 50000
+2025-06-11 11:46:24,919 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:46:33,224 - runner - INFO - FID Score: 20.82618417522127
+2025-06-11 11:46:33,321 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 11:56:10,079 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_10000_11000.pt
+2025-06-11 11:57:03,152 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 11:57:03,207 - runner - INFO - Sampling total 60000 samples; Already generated 11000 samples; Remaining samples: 49000
+2025-06-11 11:57:03,207 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 11:57:11,956 - runner - INFO - FID Score: 20.593651415789054
+2025-06-11 11:57:12,054 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 12:06:49,486 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_11000_12000.pt
+2025-06-11 12:07:47,806 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 12:07:47,866 - runner - INFO - Sampling total 60000 samples; Already generated 12000 samples; Remaining samples: 48000
+2025-06-11 12:07:47,866 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 12:07:57,040 - runner - INFO - FID Score: 20.318646844358454
+2025-06-11 12:07:57,172 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 12:17:34,051 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_12000_13000.pt
+2025-06-11 12:18:36,667 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 12:18:36,731 - runner - INFO - Sampling total 60000 samples; Already generated 13000 samples; Remaining samples: 47000
+2025-06-11 12:18:36,732 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 12:18:46,452 - runner - INFO - FID Score: 20.17785582058883
+2025-06-11 12:18:46,570 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 12:28:23,146 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_13000_14000.pt
+2025-06-11 12:29:31,765 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 12:29:31,834 - runner - INFO - Sampling total 60000 samples; Already generated 14000 samples; Remaining samples: 46000
+2025-06-11 12:29:31,834 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 12:29:41,865 - runner - INFO - FID Score: 20.080233227047984
+2025-06-11 12:29:41,999 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 12:39:19,629 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_14000_15000.pt
+2025-06-11 12:40:32,302 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 12:40:32,376 - runner - INFO - Sampling total 60000 samples; Already generated 15000 samples; Remaining samples: 45000
+2025-06-11 12:40:32,376 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 12:40:43,092 - runner - INFO - FID Score: 19.869701164496632
+2025-06-11 12:40:43,236 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 12:50:20,108 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_15000_16000.pt
+2025-06-11 12:51:38,332 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 12:51:38,411 - runner - INFO - Sampling total 60000 samples; Already generated 16000 samples; Remaining samples: 44000
+2025-06-11 12:51:38,411 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 12:51:49,492 - runner - INFO - FID Score: 19.771936714125445
+2025-06-11 12:51:49,632 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:01:26,164 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_16000_17000.pt
+2025-06-11 13:02:48,914 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 13:02:48,997 - runner - INFO - Sampling total 60000 samples; Already generated 17000 samples; Remaining samples: 43000
+2025-06-11 13:02:48,998 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 13:03:00,860 - runner - INFO - FID Score: 19.627484044621667
+2025-06-11 13:03:01,013 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:12:37,995 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_17000_18000.pt
+2025-06-11 13:14:06,421 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 13:14:06,510 - runner - INFO - Sampling total 60000 samples; Already generated 18000 samples; Remaining samples: 42000
+2025-06-11 13:14:06,511 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 13:14:18,680 - runner - INFO - FID Score: 19.57704906915967
+2025-06-11 13:14:18,835 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:23:55,715 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_18000_19000.pt
+2025-06-11 13:25:29,038 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 13:25:29,131 - runner - INFO - Sampling total 60000 samples; Already generated 19000 samples; Remaining samples: 41000
+2025-06-11 13:25:29,131 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 13:25:41,808 - runner - INFO - FID Score: 19.531915001805487
+2025-06-11 13:25:41,987 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:35:19,493 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_19000_20000.pt
+2025-06-11 13:36:58,529 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 13:36:58,629 - runner - INFO - Sampling total 60000 samples; Already generated 20000 samples; Remaining samples: 40000
+2025-06-11 13:36:58,629 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 13:37:11,952 - runner - INFO - FID Score: 19.492718574232924
+2025-06-11 13:37:12,116 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:46:50,908 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_20000_21000.pt
+2025-06-11 13:48:36,590 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 13:48:36,696 - runner - INFO - Sampling total 60000 samples; Already generated 21000 samples; Remaining samples: 39000
+2025-06-11 13:48:36,696 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 13:48:50,982 - runner - INFO - FID Score: 19.466344279812517
+2025-06-11 13:48:51,163 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 13:58:30,147 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_21000_22000.pt
+2025-06-11 14:00:24,192 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 14:00:24,301 - runner - INFO - Sampling total 60000 samples; Already generated 22000 samples; Remaining samples: 38000
+2025-06-11 14:00:24,301 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 14:00:38,997 - runner - INFO - FID Score: 19.38664415866117
+2025-06-11 14:00:39,178 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 14:10:18,987 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_22000_23000.pt
+2025-06-11 14:12:12,554 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 14:12:12,667 - runner - INFO - Sampling total 60000 samples; Already generated 23000 samples; Remaining samples: 37000
+2025-06-11 14:12:12,667 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 14:12:27,546 - runner - INFO - FID Score: 19.34406134763657
+2025-06-11 14:12:27,738 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 14:22:10,130 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_23000_24000.pt
+2025-06-11 14:24:11,512 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 14:24:11,633 - runner - INFO - Sampling total 60000 samples; Already generated 24000 samples; Remaining samples: 36000
+2025-06-11 14:24:11,633 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 14:24:27,433 - runner - INFO - FID Score: 19.31576297262194
+2025-06-11 14:24:27,630 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 14:34:11,529 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_24000_25000.pt
+2025-06-11 14:36:16,486 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 14:36:16,613 - runner - INFO - Sampling total 60000 samples; Already generated 25000 samples; Remaining samples: 35000
+2025-06-11 14:36:16,613 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 14:36:32,458 - runner - INFO - FID Score: 19.28612054414492
+2025-06-11 14:36:32,668 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 14:46:19,760 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_25000_26000.pt
+2025-06-11 14:48:31,484 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 14:48:31,616 - runner - INFO - Sampling total 60000 samples; Already generated 26000 samples; Remaining samples: 34000
+2025-06-11 14:48:31,616 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 14:48:48,062 - runner - INFO - FID Score: 19.241815418541137
+2025-06-11 14:48:48,282 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 14:58:37,225 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_26000_27000.pt
+2025-06-11 15:00:53,344 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 15:00:53,479 - runner - INFO - Sampling total 60000 samples; Already generated 27000 samples; Remaining samples: 33000
+2025-06-11 15:00:53,479 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 15:01:10,790 - runner - INFO - FID Score: 19.152651615155435
+2025-06-11 15:01:11,008 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 15:11:02,231 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_27000_28000.pt
+2025-06-11 15:13:24,305 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 15:13:24,446 - runner - INFO - Sampling total 60000 samples; Already generated 28000 samples; Remaining samples: 32000
+2025-06-11 15:13:24,446 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 15:13:42,241 - runner - INFO - FID Score: 19.11410865662168
+2025-06-11 15:13:42,465 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 15:23:35,979 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_28000_29000.pt
+2025-06-11 15:26:01,701 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 15:26:01,846 - runner - INFO - Sampling total 60000 samples; Already generated 29000 samples; Remaining samples: 31000
+2025-06-11 15:26:01,846 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 15:26:20,128 - runner - INFO - FID Score: 19.10565437264313
+2025-06-11 15:26:20,384 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 15:36:16,953 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_29000_30000.pt
+2025-06-11 15:38:46,765 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 15:38:46,912 - runner - INFO - Sampling total 60000 samples; Already generated 30000 samples; Remaining samples: 30000
+2025-06-11 15:38:46,913 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 15:39:05,635 - runner - INFO - FID Score: 19.089022171417696
+2025-06-11 15:39:05,882 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 15:49:05,381 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_30000_31000.pt
+2025-06-11 15:51:42,041 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 15:51:42,201 - runner - INFO - Sampling total 60000 samples; Already generated 31000 samples; Remaining samples: 29000
+2025-06-11 15:51:42,202 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 15:52:01,414 - runner - INFO - FID Score: 19.06146478919078
+2025-06-11 15:52:01,680 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 16:02:05,325 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_31000_32000.pt
+2025-06-11 16:04:48,207 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 16:04:48,369 - runner - INFO - Sampling total 60000 samples; Already generated 32000 samples; Remaining samples: 28000
+2025-06-11 16:04:48,369 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 16:05:08,451 - runner - INFO - FID Score: 19.06173208925776
+2025-06-11 16:05:08,728 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 16:15:14,190 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_32000_33000.pt
+2025-06-11 16:18:00,729 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 16:18:00,891 - runner - INFO - Sampling total 60000 samples; Already generated 33000 samples; Remaining samples: 27000
+2025-06-11 16:18:00,891 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 16:18:21,125 - runner - INFO - FID Score: 19.026779534182253
+2025-06-11 16:18:21,399 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 16:28:27,984 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_33000_34000.pt
+2025-06-11 16:31:16,168 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 16:31:16,337 - runner - INFO - Sampling total 60000 samples; Already generated 34000 samples; Remaining samples: 26000
+2025-06-11 16:31:16,338 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 16:31:36,936 - runner - INFO - FID Score: 19.018706002834335
+2025-06-11 16:31:37,228 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 16:41:41,208 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_34000_35000.pt
+2025-06-11 16:44:36,767 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 16:44:36,938 - runner - INFO - Sampling total 60000 samples; Already generated 35000 samples; Remaining samples: 25000
+2025-06-11 16:44:36,938 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 16:44:57,716 - runner - INFO - FID Score: 18.969317040711985
+2025-06-11 16:44:57,998 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 16:55:05,155 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_35000_36000.pt
+2025-06-11 16:58:03,202 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 16:58:03,381 - runner - INFO - Sampling total 60000 samples; Already generated 36000 samples; Remaining samples: 24000
+2025-06-11 16:58:03,381 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 16:58:24,917 - runner - INFO - FID Score: 18.949055234178445
+2025-06-11 16:58:25,212 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 17:08:33,757 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_36000_37000.pt
+2025-06-11 17:11:36,222 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 17:11:36,404 - runner - INFO - Sampling total 60000 samples; Already generated 37000 samples; Remaining samples: 23000
+2025-06-11 17:11:36,404 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 17:11:58,292 - runner - INFO - FID Score: 18.916319817106853
+2025-06-11 17:11:58,589 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 17:22:09,064 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_37000_38000.pt
+2025-06-11 17:25:16,708 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 17:25:16,894 - runner - INFO - Sampling total 60000 samples; Already generated 38000 samples; Remaining samples: 22000
+2025-06-11 17:25:16,894 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 17:25:39,471 - runner - INFO - FID Score: 18.902390837432392
+2025-06-11 17:25:39,783 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 17:35:53,332 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_38000_39000.pt
+2025-06-11 17:39:05,500 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 17:39:05,692 - runner - INFO - Sampling total 60000 samples; Already generated 39000 samples; Remaining samples: 21000
+2025-06-11 17:39:05,692 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 17:39:28,741 - runner - INFO - FID Score: 18.887635886045132
+2025-06-11 17:39:29,053 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 17:49:45,131 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_39000_40000.pt
+2025-06-11 17:53:02,938 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 17:53:03,135 - runner - INFO - Sampling total 60000 samples; Already generated 40000 samples; Remaining samples: 20000
+2025-06-11 17:53:03,135 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 17:53:26,723 - runner - INFO - FID Score: 18.901020731790368
+2025-06-11 17:53:27,074 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 18:03:46,136 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_40000_41000.pt
+2025-06-11 18:07:11,356 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 18:07:11,558 - runner - INFO - Sampling total 60000 samples; Already generated 41000 samples; Remaining samples: 19000
+2025-06-11 18:07:11,558 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 18:07:35,408 - runner - INFO - FID Score: 18.875158859440262
+2025-06-11 18:07:35,735 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 18:17:56,776 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_41000_42000.pt
+2025-06-11 18:21:25,599 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 18:21:25,807 - runner - INFO - Sampling total 60000 samples; Already generated 42000 samples; Remaining samples: 18000
+2025-06-11 18:21:25,808 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 18:21:50,500 - runner - INFO - FID Score: 18.90770365870833
+2025-06-11 18:21:50,852 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 18:32:13,950 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_42000_43000.pt
+2025-06-11 18:35:48,908 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 18:35:49,120 - runner - INFO - Sampling total 60000 samples; Already generated 43000 samples; Remaining samples: 17000
+2025-06-11 18:35:49,120 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 18:36:14,206 - runner - INFO - FID Score: 18.89486630933635
+2025-06-11 18:36:14,558 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 18:46:41,209 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_43000_44000.pt
+2025-06-11 18:50:19,532 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 18:50:19,748 - runner - INFO - Sampling total 60000 samples; Already generated 44000 samples; Remaining samples: 16000
+2025-06-11 18:50:19,748 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 18:50:45,284 - runner - INFO - FID Score: 18.890242249683695
+2025-06-11 18:50:45,632 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 19:01:14,712 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_44000_45000.pt
+2025-06-11 19:04:58,204 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 19:04:58,425 - runner - INFO - Sampling total 60000 samples; Already generated 45000 samples; Remaining samples: 15000
+2025-06-11 19:04:58,425 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 19:05:24,629 - runner - INFO - FID Score: 18.865315781512663
+2025-06-11 19:05:24,982 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 19:15:56,345 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_45000_46000.pt
+2025-06-11 19:19:45,569 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 19:19:45,797 - runner - INFO - Sampling total 60000 samples; Already generated 46000 samples; Remaining samples: 14000
+2025-06-11 19:19:45,798 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 19:20:12,404 - runner - INFO - FID Score: 18.8391960457285
+2025-06-11 19:20:12,766 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 19:30:46,143 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_46000_47000.pt
+2025-06-11 19:34:38,519 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 19:34:38,747 - runner - INFO - Sampling total 60000 samples; Already generated 47000 samples; Remaining samples: 13000
+2025-06-11 19:34:38,747 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 19:35:05,665 - runner - INFO - FID Score: 18.856333927508103
+2025-06-11 19:35:06,033 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 19:45:42,679 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_47000_48000.pt
+2025-06-11 19:49:41,771 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 19:49:42,009 - runner - INFO - Sampling total 60000 samples; Already generated 48000 samples; Remaining samples: 12000
+2025-06-11 19:49:42,009 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 19:50:09,724 - runner - INFO - FID Score: 18.83695336579507
+2025-06-11 19:50:10,114 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 20:00:49,139 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_48000_49000.pt
+2025-06-11 20:04:52,123 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 20:04:52,363 - runner - INFO - Sampling total 60000 samples; Already generated 49000 samples; Remaining samples: 11000
+2025-06-11 20:04:52,363 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 20:05:20,668 - runner - INFO - FID Score: 18.81441018734523
+2025-06-11 20:05:21,056 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 20:16:02,778 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_49000_50000.pt
+2025-06-11 20:20:10,418 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 20:20:10,668 - runner - INFO - Sampling total 60000 samples; Already generated 50000 samples; Remaining samples: 10000
+2025-06-11 20:20:10,668 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 20:20:39,168 - runner - INFO - FID Score: 18.81987188786036
+2025-06-11 20:20:39,566 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 20:31:26,491 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_50000_51000.pt
+2025-06-11 20:35:41,435 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 20:35:41,688 - runner - INFO - Sampling total 60000 samples; Already generated 51000 samples; Remaining samples: 9000
+2025-06-11 20:35:41,688 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 20:36:10,732 - runner - INFO - FID Score: 18.81514828513025
+2025-06-11 20:36:11,135 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 20:46:55,726 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_51000_52000.pt
+2025-06-11 20:51:14,853 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 20:51:15,109 - runner - INFO - Sampling total 60000 samples; Already generated 52000 samples; Remaining samples: 8000
+2025-06-11 20:51:15,109 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 20:51:44,896 - runner - INFO - FID Score: 18.794308920209232
+2025-06-11 20:51:45,303 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 21:02:32,775 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_52000_53000.pt
+2025-06-11 21:06:55,257 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 21:06:55,516 - runner - INFO - Sampling total 60000 samples; Already generated 53000 samples; Remaining samples: 7000
+2025-06-11 21:06:55,516 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 21:07:25,601 - runner - INFO - FID Score: 18.78587379172012
+2025-06-11 21:07:26,014 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 21:18:15,528 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_53000_54000.pt
+2025-06-11 21:22:43,628 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 21:22:43,892 - runner - INFO - Sampling total 60000 samples; Already generated 54000 samples; Remaining samples: 6000
+2025-06-11 21:22:43,892 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 21:23:14,622 - runner - INFO - FID Score: 18.80811102491333
+2025-06-11 21:23:15,049 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 21:34:07,981 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_54000_55000.pt
+2025-06-11 21:38:42,865 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 21:38:43,134 - runner - INFO - Sampling total 60000 samples; Already generated 55000 samples; Remaining samples: 5000
+2025-06-11 21:38:43,134 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 21:39:14,316 - runner - INFO - FID Score: 18.787232889222253
+2025-06-11 21:39:14,760 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 21:50:09,325 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_55000_56000.pt
+2025-06-11 21:54:48,270 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 21:54:48,549 - runner - INFO - Sampling total 60000 samples; Already generated 56000 samples; Remaining samples: 4000
+2025-06-11 21:54:48,549 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 21:55:20,336 - runner - INFO - FID Score: 18.77550071053804
+2025-06-11 21:55:20,788 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 22:06:17,953 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_56000_57000.pt
+2025-06-11 22:11:00,673 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 22:11:00,952 - runner - INFO - Sampling total 60000 samples; Already generated 57000 samples; Remaining samples: 3000
+2025-06-11 22:11:00,953 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 22:11:33,085 - runner - INFO - FID Score: 18.76330226099708
+2025-06-11 22:11:33,532 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 22:22:34,183 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_57000_58000.pt
+2025-06-11 22:27:24,839 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 22:27:25,122 - runner - INFO - Sampling total 60000 samples; Already generated 58000 samples; Remaining samples: 2000
+2025-06-11 22:27:25,123 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 22:27:58,000 - runner - INFO - FID Score: 18.772237982139472
+2025-06-11 22:27:58,476 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 22:39:01,030 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_58000_59000.pt
+2025-06-11 22:43:53,351 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 22:43:53,643 - runner - INFO - Sampling total 60000 samples; Already generated 59000 samples; Remaining samples: 1000
+2025-06-11 22:43:53,643 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 22:44:26,680 - runner - INFO - FID Score: 18.765958507678306
+2025-06-11 22:44:27,146 - runner - INFO - Sampling 1000 samples with 1000 steps
+2025-06-11 22:55:32,692 - runner - INFO - Saved 1000 samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/samples_59000_60000.pt
+2025-06-11 23:00:34,306 - runner - INFO - Converted 1000 raw samples to assets/ve/cifar10_ncsnpp_cont/sample/1999/raw
+2025-06-11 23:00:34,599 - runner - INFO - Sampling total 60000 samples; Already generated 60000 samples; Remaining samples: 0
+2025-06-11 23:00:34,599 - runner - INFO - Calculating FID Score for ['assets/ve/cifar10_ncsnpp_cont/sample/1999/raw', 'data/CIFAR10.npz']
+2025-06-11 23:01:08,520 - runner - INFO - FID Score: 18.759829812078465
